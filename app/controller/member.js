@@ -4,7 +4,11 @@ const Controller = require("egg").Controller;
 
 class MemberController extends Controller {
   async index() {
-    this.ctx.body = await this.ctx.service.member.getMember(this.ctx.request.query.slackId);
+    // this.ctx.body = await this.ctx.service.member.getMember(this.ctx.request.query.slackId);
+    console.log(await this.ctx.service.member.getMember('yoyoyo'));
+    const r = await this.ctx.service.member.getMembers();
+
+    this.ctx.body = r;
   }
 
   async delete() {
@@ -30,7 +34,13 @@ class MemberController extends Controller {
       return;
     }
 
-    await this.ctx.service.member.addMember(slackId, playerName);
+    try {
+      await this.ctx.service.member.addMember(slackId, playerName);
+    } catch (error) {
+      this.ctx.body = { success: false, error: error.message };
+      return;
+    }
+    
 
     this.ctx.body = { success: true };
   }

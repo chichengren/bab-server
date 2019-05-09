@@ -7,6 +7,10 @@ class MemberService extends Service {
   async addMember(slackId, playerName) {
     this.ctx.logger.info(`service.member.addMember - slackId: ${slackId} playerName: ${playerName}`);
 
+    if (await this.getMember(slackId)) {
+      throw new Error('slack Id already registered');
+    }
+
     await this.ctx.model.Member.create({ slackId, playerName });
   }
 
@@ -17,7 +21,9 @@ class MemberService extends Service {
   }
 
   async getMembers() {
-    // TODO
+    this.ctx.logger.info(`service.member.getMember`);
+
+    return await this.ctx.model.Member.find();
   }
 
   async deleteMember(slackId) {
