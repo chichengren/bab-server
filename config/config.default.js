@@ -19,13 +19,14 @@ module.exports = appInfo => {
   config.middleware = [];
 
   // mongo db
-  config.mongo = {
-    client: {
-      host: process.env.MONGODB_URL,
-      name: process.env.MONGODB_NAME,
-      port: process.env.MONGODB_PORT,
-      user: process.env.MONGODB_USER,
-      password: process.env.MONGODB_PWD
+  config.mongoose = {
+    url: process.env.MONGODB_URL,
+  };
+
+  // securify
+  config.security = {
+    csrf: {
+      enable: false
     }
   };
 
