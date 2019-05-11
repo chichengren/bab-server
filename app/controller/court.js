@@ -2,24 +2,54 @@
 
 const Controller = require('egg').Controller;
 
-class CourtsController extends Controller {
+class CourtController extends Controller {
   async index() {
-    const reservations = await this.service.court.getReservations();
+    const reservations = await this.service.court.getActiveReservations();
 
-    this.ctx.body = { success: true, reservations };
+    this.ctx.body = { reservations };
   }
 
   async register() {
-    const { ctx } = this;
+    const { courtNumber, playerNames, delayInMinutes = 0, randoms = false, durationInMinutes = 45 } = this.ctx.request.body;
+
+    if (!courtNumber) {
+      this.ctx.status = 400;
+      this.ctx.body = { message: 'Missing court number' };
+      return;
+    }
+
+    if (!playerNames || !playerNames.length) {
+      this.ctx.status = 400;
+      this.ctx.body = { message: 'Must provide player names' };
+      return;
+    }
+
+    const startAt = Date.now() + delayInMinutes * 60 * 1000;
+    const endAt = startAt + durationInMinutes * 60 * 1000;
+
+    try {
+      const reservation = await this.service.court.addReservation(courtNumber, playerNames, startAt, endAt, randoms);
+
+      this.ctx.body = { reservation };
+    } catch (error) {
+      this.ctx.body = { error: error.message };
+      this.ctx.status = 400;
+    }
   }
 
   async unregister() {
-    const { ctx } = this;
-  }
+    const { courtNumber } = this.ctx.request.body;
 
-  async reset() {
-    const { ctx } = this;
+    if (!courtNumber) {
+      this.ctx.status = 400;
+      this.ctx.body = { message: 'Invalid court number' };
+      return;
+    }
+
+    await this.service.court.removeReservation(courtNumber);
+
+    this.ctx.body = {};
   }
 }
 
-module.exports = CourtsController;
+module.exports = CourtController;

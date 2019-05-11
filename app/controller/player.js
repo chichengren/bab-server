@@ -3,6 +3,8 @@
 const Controller = require('egg').Controller;
 
 class PlayerController extends Controller {
+  // TODO: check session
+
   async index() {
     // TODO: court number?
     this.ctx.body = { players: await this.service.player.getAll() };

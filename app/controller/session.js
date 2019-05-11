@@ -7,6 +7,7 @@ class SessionController extends Controller {
     try {
       await this.service.session.start();
     } catch (error) {
+      this.ctx.body = { error: error.messeage };
       this.ctx.status = 400;
       return;
     }
@@ -18,6 +19,7 @@ class SessionController extends Controller {
     try {
       await this.service.session.end();
     } catch (error) {
+      this.ctx.body = { error: error.messeage };
       this.ctx.status = 400;
       return;
     }
@@ -25,7 +27,7 @@ class SessionController extends Controller {
     this.ctx.body = {};
   }
 
-  async get() {
+  async index() {
     const session = await this.service.session.get();
 
     if (!session) {

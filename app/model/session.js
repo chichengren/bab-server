@@ -5,7 +5,7 @@ module.exports = app => {
   const Schema = mongoose.Schema;
 
   const SessionSchema = new Schema({
-    startedAt: Number
+    startAt: Number
   }, {
     collection: 'sessions'
   });

@@ -7,13 +7,24 @@ module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
 
-  router.get('/courts', controller.court.index);
-  // router.post('/courts/register', controller.courts.register);
-  // router.post('/courts/unregister', controller.courts.unregister);
-  // router.post('/courts/reset', controller.courts.reset);
+  router.get('/court', controller.court.index);
+  router.post('/court/register', controller.court.register);
+  router.post('/court/unregister', controller.court.unregister);
 
+  // player
+  router.get('/player', controller.player.index);
+  router.get('/player/get', controller.player.get);
+  router.post('/player/add', controller.player.add);
+  router.post('/player/delete', controller.player.delete);
+
+  // member
   router.get('/member', controller.member.index);
   router.get('/member/get', controller.member.get);
   router.post('/member/add', controller.member.add);
   router.post('/member/delete', controller.member.delete);
+
+  // session
+  router.get('/session', controller.session.index);
+  router.post('/session/start', controller.session.start);
+  router.post('/session/end', controller.session.end);
 };

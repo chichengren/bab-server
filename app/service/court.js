@@ -1,39 +1,35 @@
 'use strict';
 
-// app/service/user.js
+// app/service/court.js
 const Service = require('egg').Service;
 
-const COLLECTION_RESERVATION = 'reservations';
-
 class CourtService extends Service {
-  async getReservations() {
-    const { mongo } = this.app;
-    const { logger } = this.context;
+  async getActiveReservations() {
+    this.ctx.logger.info('service.court.getActiveReservations');
 
-    logger.info('service.court.getReservations');
+    const timestamp = Date.now();
 
-    return await mongo.find(COLLECTION_RESERVATION);
+    return await this.ctx.model.Reservation
+      .where('startAt').lte(timestamp)
+      .where('endAt')
+      .gte(timestamp)
+      .exec();
   }
 
-  async addReservation(courtNumber, players, startAt, randoms = false) {
-    const { mongo } = this.app;
-    const { logger } = this.context;
+  async addReservation(courtNumber, playerNames, startAt, endAt, randoms) {
+    this.ctx.logger.info(`service.court.addReservation - courtNumber: ${courtNumber} playerNames #: ${playerNames.length}`);
 
-    logger.info(`service.court.addReservation - courtNumber: ${courtNumber} players #: ${players.length}`);
+    if (playerNames.length > 4) {
+      throw new Error('cannot have more than 4 players on the court');
+    }
 
-    await mongo.insertOne(COLLECTION_RESERVATION, { courtNumber, players, startAt, randoms });
+    await this.ctx.model.Reservation.create({ courtNumber, playerNames, startAt, endAt, randoms });
   }
 
-  async deleteReservations() {
-    // TODO
-  }
+  async removeReservation(courtNumber) {
+    this.ctx.logger.info(`service.court.removeReservation - courtNumber: ${courtNumber}`);
 
-  async updateReservations() {
-    // TODO
-  }
-
-  async resetReservation(courtNumber) {
-
+    await this.ctx.model.Reservation.deleteOne({ courtNumber });
   }
 }
 
