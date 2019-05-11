@@ -16,12 +16,12 @@ class MemberService extends Service {
 
   async getMember(slackId) {
     this.ctx.logger.info(`service.member.getMember - slackId: ${slackId}`);
-    
+
     return await this.ctx.model.Member.findOne({ slackId });
   }
 
   async getMembers() {
-    this.ctx.logger.info(`service.member.getMember`);
+    this.ctx.logger.info('service.member.getMember');
 
     return await this.ctx.model.Member.find();
   }

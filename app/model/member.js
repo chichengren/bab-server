@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = app => {
   const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
@@ -6,7 +8,7 @@ module.exports = app => {
     slackId: { type: String, index: true, unique: true },
     playerName: { type: String, index: true }
   }, {
-      collection: 'members'
+    collection: 'members'
   });
 
   const MemberModel = mongoose.model('Member', MemberSchema);

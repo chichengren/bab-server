@@ -4,10 +4,9 @@ const Controller = require('egg').Controller;
 
 class CourtsController extends Controller {
   async index() {
-    const { ctx } = this;
-    ctx.service.court.getReservations();
+    const reservations = await this.ctx.service.court.getReservations();
 
-    ctx.body = 'getting reservations';
+    this.ctx.body = { success: true, reservations };
   }
 
   async register() {

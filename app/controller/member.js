@@ -1,19 +1,15 @@
-"use strict";
+'use strict';
 
-const Controller = require("egg").Controller;
+const Controller = require('egg').Controller;
 
 class MemberController extends Controller {
   async index() {
-    // this.ctx.body = await this.ctx.service.member.getMember(this.ctx.request.query.slackId);
-    console.log(await this.ctx.service.member.getMember('yoyoyo'));
-    const r = await this.ctx.service.member.getMembers();
-
-    this.ctx.body = r;
+    this.ctx.body = 'hello bab';
   }
 
   async delete() {
     const { slackId } = this.ctx.request.body;
-    console.log(this.ctx.request.body);
+
     if (!slackId) {
       this.ctx.status = 400;
       this.ctx.body = { success: false };
@@ -40,7 +36,6 @@ class MemberController extends Controller {
       this.ctx.body = { success: false, error: error.message };
       return;
     }
-    
 
     this.ctx.body = { success: true };
   }

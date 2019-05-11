@@ -10,7 +10,7 @@ class CourtService extends Service {
     const { mongo } = this.app;
     const { logger } = this.context;
 
-    logger.info(`service.court.getReservations`);
+    logger.info('service.court.getReservations');
 
     return await mongo.find(COLLECTION_RESERVATION);
   }
@@ -30,6 +30,10 @@ class CourtService extends Service {
 
   async updateReservations() {
     // TODO
+  }
+
+  async resetReservation(courtNumber) {
+
   }
 }
 
