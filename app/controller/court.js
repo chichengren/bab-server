@@ -4,7 +4,7 @@ const Controller = require('egg').Controller;
 
 class CourtsController extends Controller {
   async index() {
-    const reservations = await this.ctx.service.court.getReservations();
+    const reservations = await this.service.court.getReservations();
 
     this.ctx.body = { success: true, reservations };
   }

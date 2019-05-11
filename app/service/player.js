@@ -3,29 +3,49 @@
 // app/service/user.js
 const Service = require('egg').Service;
 
-const COLLECTION_PLAYER = 'players';
+const ZODIAC = [
+  'mouse',
+  'ox',
+  'tiger',
+  'rabbit',
+  'dragon',
+  'snake',
+  'horse',
+  'goat',
+  'monkey',
+  'rooster',
+  'dog',
+  'pig',
+  'cat'
+];
 
 class PlayerService extends Service {
-  async addPlayer(name, password, slackId) {
-    const { mongo } = this.app;
-    const { logger } = this.context;
+  async add(playerName, password, slackId) {
+    this.ctx.logger.info(`service.player.add - playerName: ${playerName} password: ${password} slackId: ${slackId}`);
 
-    logger.info(`service.player.addPlayer - name: ${name} password: ${password} slackId: ${slackId}`);
+    if (!ZODIAC.includes(password)) {
+      throw new Error('zodiac not found');
+    }
 
-    await mongo.insertOne(COLLECTION_PLAYER, { name, password, slackId });
+    await this.ctx.model.Player.create({ playerName, password, slackId });
   }
 
-  async getPlayers() {
-      // TODO
+  async getAll() {
+    this.ctx.logger.info('service.player.getAll');
+
+    return await this.ctx.model.Player.find();
   }
 
-  async deletePlayer(name) {
-    const { mongo } = this.app;
-    const { logger } = this.context;
+  async get(playerName) {
+    this.ctx.logger.info(`service.player.get - playerName: ${playerName}`);
 
-    logger.info(`service.player.deletePlayer - name: ${name}`);
+    return await this.ctx.model.Player.findOne({ playerName });
+  }
 
-    await mongo.deleteOne(COLLECTION_PLAYER, { name });
+  async delete(playerName) {
+    this.ctx.logger.info(`service.player.delete - playerName: ${playerName}`);
+
+    await this.ctx.model.Player.deleteOne({ playerName });
   }
 }
 

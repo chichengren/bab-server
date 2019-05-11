@@ -13,6 +13,7 @@ module.exports = app => {
   // router.post('/courts/reset', controller.courts.reset);
 
   router.get('/member', controller.member.index);
+  router.get('/member/get', controller.member.get);
   router.post('/member/add', controller.member.add);
   router.post('/member/delete', controller.member.delete);
 };

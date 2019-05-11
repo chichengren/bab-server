@@ -4,7 +4,27 @@ const Controller = require('egg').Controller;
 
 class MemberController extends Controller {
   async index() {
-    this.ctx.body = 'hello bab';
+    const members = await this.service.member.getAll();
+
+    this.ctx.body = { members };
+  }
+
+  async get() {
+    const { slackId } = this.ctx.request.body;
+
+    if (!slackId) {
+      this.ctx.status = 400;
+      return;
+    }
+
+    const member = await this.service.member.get(slackId);
+
+    if (!member) {
+      this.ctx.status = 404;
+      return;
+    }
+
+    this.ctx.body = { member };
   }
 
   async delete() {
@@ -12,32 +32,33 @@ class MemberController extends Controller {
 
     if (!slackId) {
       this.ctx.status = 400;
-      this.ctx.body = { success: false };
       return;
     }
 
-    await this.ctx.service.member.deleteMember(slackId);
+    await this.service.member.delete(slackId);
 
-    this.ctx.body = { success: true };
+    this.ctx.body = {};
   }
 
   async add() {
-    const { slackId, playerName } = this.ctx.request.body;
+    const { slackId } = this.ctx.request.body;
+    let { playerName } = this.ctx.request.body;
 
     if (!slackId || !playerName) {
       this.ctx.status = 400;
-      this.ctx.body = { succses: false };
       return;
     }
+
+    playerName = playerName.toLowerCase();
 
     try {
-      await this.ctx.service.member.addMember(slackId, playerName);
+      await this.service.member.add(slackId, playerName);
     } catch (error) {
-      this.ctx.body = { success: false, error: error.message };
+      this.ctx.status = 400;
       return;
     }
 
-    this.ctx.body = { success: true };
+    this.ctx.body = {};
   }
 }
 

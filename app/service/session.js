@@ -1,26 +1,38 @@
-"use strict";
+'use strict';
 
-const Service = require("egg").Service;
-
-const COLLECTION_SESSIONS = "sessions";
+const Service = require('egg').Service;
 
 class SessionService extends Service {
-  async addSeesion() {
-    const { mongo } = this.app;
-    const { logger } = this.context;
+  async start() {
+    this.ctx.logger.info('service.session.start');
 
-    logger.info(`service.session.addSession`);
+    const session = await this.get();
 
-    await mongo.insertOne(COLLECTION_SESSIONS, { startAt: Date.now() });
+    if (session) {
+      throw new Error('session record already existed');
+    }
+
+    await this.ctx.model.Session.create({ startAt: Date.now() });
   }
 
-  async getSession() {
-    const { mongo } = this.app;
-    const { logger } = this.context;
+  async end() {
+    this.ctx.logger.info('service.session.getSession');
 
-    logger.info(`service.session.getSession`);
+    const record = await this.get();
 
-    await mongo.getOne(COLLECTION_SESSIONS);
+    if (!record) {
+      throw new Error('session record not found');
+    }
+
+    const session = { ...record };
+
+    await this.ctx.model.Session.deleteOne();
+
+    return session;
+  }
+
+  async get() {
+    return await this.ctx.model.Session.findOne();
   }
 }
 
