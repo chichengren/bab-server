@@ -5,7 +5,8 @@ module.exports = app => {
   const Schema = mongoose.Schema;
 
   const ReservationSchema = new Schema({
-    courtNumber: { type: Number, index: true, unique: true },
+    token: { type: String, index: true, unique: true },
+    courtNumber: { type: Number, index: true },
     playerNames: [ String ],
     startAt: { type: Number, index: true },
     endAt: { type: Number, index: true },

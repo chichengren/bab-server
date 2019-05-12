@@ -1,6 +1,7 @@
 {
   "extends": "eslint-config-egg",
   "rules": {
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "array-bracket-spacing": "off"
   }
 }

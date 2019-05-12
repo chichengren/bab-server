@@ -7,6 +7,7 @@ module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
 
+  // court
   router.get('/court', controller.court.index);
   router.post('/court/register', controller.court.register);
   router.post('/court/unregister', controller.court.unregister);

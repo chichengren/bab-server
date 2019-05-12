@@ -7,7 +7,10 @@ module.exports = app => {
   const PlayerSchema = new Schema({
     playerName: { type: String, index: true },
     password: String,
-    countNumber: { type: Number, index: true },
+    // court reservation
+    courtNumber: Number,
+    reservationToken: { type: String, index: true },
+    // member
     slackId: String
   }, {
     collection: 'players'

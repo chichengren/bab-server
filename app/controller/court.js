@@ -38,15 +38,15 @@ class CourtController extends Controller {
   }
 
   async unregister() {
-    const { courtNumber } = this.ctx.request.body;
+    const { token } = this.ctx.request.body;
 
-    if (!courtNumber) {
+    if (!token) {
       this.ctx.status = 400;
       this.ctx.body = { message: 'Invalid court number' };
       return;
     }
 
-    await this.service.court.removeReservation(courtNumber);
+    await this.service.court.removeReservation(token);
 
     this.ctx.body = {};
   }
