@@ -6,7 +6,9 @@ class PlayerController extends Controller {
   // TODO: check session
 
   async index() {
-    this.ctx.body = await this.ctx.model.Player.find();
+    const players = await this.ctx.model.Player.find();
+
+    this.ctx.body = { players };
   }
 
   async add() {
@@ -35,8 +37,8 @@ class PlayerController extends Controller {
   }
 
   async get() {
-    const { slackId } = this.ctx.body;
-    let { playerName } = this.ctx.body;
+    const { slackId } = this.ctx.request.query;
+    let { playerName } = this.ctx.request.query;
 
     if (slackId) {
       const member = await this.service.member.get(slackId);
@@ -49,7 +51,7 @@ class PlayerController extends Controller {
       playerName = member.playerName;
     }
 
-    const player = await this.service.player.get(playerName);
+    const player = await this.service.player.get(playerName.toLowerCase());
 
     this.ctx.body = { player };
   }

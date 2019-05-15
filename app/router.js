@@ -13,10 +13,10 @@ module.exports = app => {
   router.post('/court/unregister', controller.court.unregister);
 
   // player
-  router.get('/player', controller.player.index);
-  router.get('/player/get', controller.player.get);
-  router.post('/player/add', controller.player.add);
-  router.post('/player/delete', controller.player.delete);
+  router.get('/api/players', controller.player.index);
+  router.get('/api/players/get', controller.player.get);
+  router.post('/api/players/add', controller.player.add);
+  router.delete('/api/players/delete', controller.player.delete);
 
   // member
   router.get('/member', controller.member.index);
