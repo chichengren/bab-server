@@ -15,7 +15,7 @@ module.exports = {
       const reservation = await ctx.model.Reservation.findOne({ token: player.reservationToken });
 
       if (reservation.endAt < Date.now()) {
-        await ctx.model.Player.updateOne({ playerName: player.playerName }, { $unset: { reservationToken: '', courtNumber: '' }});
+        await ctx.model.Player.updateOne({ name: player.name }, { $unset: { reservationToken: '', courtNumber: '' } });
       }
     }
   }

@@ -17,35 +17,35 @@ class CourtService extends Service {
       .exec();
   }
 
-  async addReservation(courtNumber, playerNames, startAt, endAt, randoms) {
-    this.ctx.logger.info(`service.court.addReservation - courtNumber: ${courtNumber} playerNames #: ${playerNames.length}`);
+  async addReservation(courtNumber, names, startAt, endAt, randoms) {
+    this.ctx.logger.info(`service.court.addReservation - courtNumber: ${courtNumber} names #: ${names.length}`);
 
-    if (playerNames.length > 4) {
+    if (names.length > 4) {
       throw new Error('cannot have more than 4 players on the court');
     }
 
     // check player status
     const players = await this.ctx.model.Player.find()
-      .where('playerName').in(playerNames)
+      .where('name').in(names)
       .exec();
 
-    if (players.length !== playerNames.length) {
+    if (players.length !== names.length) {
       throw new Error('player not found in the system');
     }
 
     players.forEach(player => {
       if (player.courtNumber) {
-        throw new Error(`player: ${player.playerName} has already signed on court: ${player.courtNumber}`);
+        throw new Error(`player: ${player.name} has already signed on court: ${player.courtNumber}`);
       }
     });
 
     // TODO: check court status
 
     // add reservation
-    const reservation = await this.ctx.model.Reservation.create({ token: uuid(), courtNumber, playerNames, startAt, endAt, randoms });
+    const reservation = await this.ctx.model.Reservation.create({ token: uuid(), courtNumber, names, startAt, endAt, randoms });
 
     // update player status
-    await this.ctx.model.Player.updateMany({ playerName: { $in: playerNames } }, { $set: { courtNumber, reservationToken: reservation.token } });
+    await this.ctx.model.Player.updateMany({ name: { $in: names } }, { $set: { courtNumber, reservationToken: reservation.token } });
 
     return reservation;
   }
@@ -56,7 +56,7 @@ class CourtService extends Service {
     const reservation = await this.ctx.model.Reservation.findOne({ token });
 
     // update player status
-    await this.ctx.model.Player.updateMany({ playerName: { $in: reservation.playerNames } }, { $unset: { courtNumber: '', reservationToken: '' } });
+    await this.ctx.model.Player.updateMany({ name: { $in: reservation.names } }, { $unset: { courtNumber: '', reservationToken: '' } });
 
     // remove reservation
     await this.ctx.model.Reservation.deleteOne({ token });

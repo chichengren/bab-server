@@ -95,14 +95,14 @@ let kittens = api.kittens.get();
 {
   "players": [
     {
-      "playerName": "Fluffums",
+      "name": "Fluffums",
       "password": "cat",
       "courtNumber": 6,
       "reservationToken": "token-one",
       "slackId": "slack-a"
     },
     {
-      "playerName": "Puffy",
+      "name": "Puffy",
       "password": "dog",
       "slackId": "slack-b"
     },
@@ -146,7 +146,7 @@ api.kittens.get(2)
 ``` -->
 
 ```shell
-curl "https://bab.moepas.com/api/players/get?playerName=xxx"
+curl "https://bab.moepas.com/api/players/get?name=xxx"
 ```
 
 <!-- ```javascript
@@ -161,7 +161,7 @@ let max = api.kittens.get(2);
 ```json
 {
   "player": {
-    "playerName": "Fluffums",
+    "name": "Fluffums",
     "password": "cat",
     "courtNumber": 6,
     "reservationToken": "token-one",
@@ -176,14 +176,14 @@ This endpoint retrieves a specific player.
 
 ### HTTP Request
 
-`GET https://bab.moepas.com/players/get?slackId=slackId(&playerName=playerName)`
+`GET https://bab.moepas.com/players/get?slackId=slackId(&name=name)`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
 slackId | The slackId of the player to retrieve
-playerName | The player name of the player to retrieve
+name | The player name of the player to retrieve
 
 ## Delete a Specific Kitten
 

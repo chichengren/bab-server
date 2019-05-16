@@ -10,7 +10,7 @@ class CourtController extends Controller {
   }
 
   async register() {
-    const { courtNumber, playerNames, delayInMinutes = 0, randoms = false, durationInMinutes = 45 } = this.ctx.request.body;
+    const { courtNumber, names, delayInMinutes = 0, randoms = false, durationInMinutes = 45 } = this.ctx.request.body;
 
     if (!courtNumber) {
       this.ctx.status = 400;
@@ -18,7 +18,7 @@ class CourtController extends Controller {
       return;
     }
 
-    if (!playerNames || !playerNames.length) {
+    if (!names || !names.length) {
       this.ctx.status = 400;
       this.ctx.body = { message: 'Must provide player names' };
       return;
@@ -28,7 +28,7 @@ class CourtController extends Controller {
     const endAt = startAt + durationInMinutes * 60 * 1000;
 
     try {
-      const reservation = await this.service.court.addReservation(courtNumber, playerNames, startAt, endAt, randoms);
+      const reservation = await this.service.court.addReservation(courtNumber, names, startAt, endAt, randoms);
 
       this.ctx.body = { reservation };
     } catch (error) {

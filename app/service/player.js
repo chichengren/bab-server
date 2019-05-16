@@ -20,14 +20,14 @@ const ZODIAC = [
 ];
 
 class PlayerService extends Service {
-  async add(playerName, password, slackId) {
-    this.ctx.logger.info(`service.player.add - playerName: ${playerName} password: ${password} slackId: ${slackId}`);
+  async add(name, password, slackId) {
+    this.ctx.logger.info(`service.player.add - name: ${name} password: ${password} slackId: ${slackId}`);
 
     if (!ZODIAC.includes(password)) {
       throw new Error('zodiac not found');
     }
 
-    await this.ctx.model.Player.create({ playerName, password, slackId });
+    await this.ctx.model.Player.create({ name, password, slackId });
   }
 
   async getAll() {
@@ -36,16 +36,16 @@ class PlayerService extends Service {
     return await this.ctx.model.Player.find();
   }
 
-  async get(playerName) {
-    this.ctx.logger.info(`service.player.get - playerName: ${playerName}`);
+  async get(name) {
+    this.ctx.logger.info(`service.player.get - name: ${name}`);
 
-    return await this.ctx.model.Player.findOne({ playerName });
+    return await this.ctx.model.Player.findOne({ name });
   }
 
-  async delete(playerName) {
-    this.ctx.logger.info(`service.player.delete - playerName: ${playerName}`);
+  async delete(name) {
+    this.ctx.logger.info(`service.player.delete - name: ${name}`);
 
-    await this.ctx.model.Player.deleteOne({ playerName });
+    await this.ctx.model.Player.deleteOne({ name });
   }
 }
 

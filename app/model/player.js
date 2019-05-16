@@ -5,7 +5,7 @@ module.exports = app => {
   const Schema = mongoose.Schema;
 
   const PlayerSchema = new Schema({
-    playerName: { type: String, index: true },
+    name: { type: String, index: true },
     password: String,
     // court reservation
     courtNumber: Number,

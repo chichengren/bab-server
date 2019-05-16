@@ -13,10 +13,10 @@ class PlayerController extends Controller {
 
   async add() {
     const { slackId, password } = this.ctx.request.body;
-    let { playerName } = this.ctx.request.body;
+    let { name } = this.ctx.request.body;
     let member;
 
-    if (!password || (!playerName && !slackId)) {
+    if (!password || (!name && !slackId)) {
       this.ctx.status = 400;
       return;
     }
@@ -25,10 +25,10 @@ class PlayerController extends Controller {
       member = await this.service.member.get(slackId);
     }
 
-    playerName = member ? member.playerName : playerName;
+    name = member ? member.name : name;
 
     try {
-      await this.service.player.add(playerName.toLowerCase(), password, slackId);
+      await this.service.player.add(name.toLowerCase(), password, slackId);
     } catch (error) {
       this.ctx.status = 400;
     }
@@ -38,7 +38,7 @@ class PlayerController extends Controller {
 
   async get() {
     const { slackId } = this.ctx.request.query;
-    let { playerName } = this.ctx.request.query;
+    let { name } = this.ctx.request.query;
 
     if (slackId) {
       const member = await this.service.member.get(slackId);
@@ -48,17 +48,17 @@ class PlayerController extends Controller {
         return;
       }
 
-      playerName = member.playerName;
+      name = member.name;
     }
 
-    const player = await this.service.player.get(playerName.toLowerCase());
+    const player = await this.service.player.get(name.toLowerCase());
 
     this.ctx.body = { player };
   }
 
   async delete() {
     const { slackId } = this.ctx.request.body;
-    let { playerName } = this.ctx.request.body;
+    let { name } = this.ctx.request.body;
 
     if (slackId) {
       const member = await this.service.member.get(slackId);
@@ -68,10 +68,10 @@ class PlayerController extends Controller {
         return;
       }
 
-      playerName = member.playerName;
+      name = member.name;
     }
 
-    await this.service.player.delete(playerName.toLowerCase());
+    await this.service.player.delete(name.toLowerCase());
 
     this.ctx.body = {};
   }

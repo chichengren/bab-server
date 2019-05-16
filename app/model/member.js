@@ -6,7 +6,7 @@ module.exports = app => {
 
   const MemberSchema = new Schema({
     slackId: { type: String, index: true, unique: true },
-    playerName: { type: String, index: true }
+    name: { type: String, index: true }
   }, {
     collection: 'members'
   });

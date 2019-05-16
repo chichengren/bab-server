@@ -8,9 +8,9 @@ module.exports = app => {
   router.get('/', controller.home.index);
 
   // court
-  router.get('/court', controller.court.index);
-  router.post('/court/register', controller.court.register);
-  router.post('/court/unregister', controller.court.unregister);
+  router.get('/api/courts', controller.court.index);
+  router.post('/api/courts/register', controller.court.register);
+  router.post('/api/courts/unregister', controller.court.unregister);
 
   // player
   router.get('/api/players', controller.player.index);
@@ -19,13 +19,13 @@ module.exports = app => {
   router.delete('/api/players/delete', controller.player.delete);
 
   // member
-  router.get('/member', controller.member.index);
-  router.get('/member/get', controller.member.get);
-  router.post('/member/add', controller.member.add);
-  router.post('/member/delete', controller.member.delete);
+  router.get('/api/members', controller.member.index);
+  router.get('/api/members/get', controller.member.get);
+  router.post('/api/members/add', controller.member.add);
+  router.post('/api/members/delete', controller.member.delete);
 
   // session
-  router.get('/session', controller.session.index);
-  router.post('/session/start', controller.session.start);
-  router.post('/session/end', controller.session.end);
+  router.get('/api/sessions', controller.session.index);
+  router.post('/api/sessions/start', controller.session.start);
+  router.post('/api/sessions/end', controller.session.end);
 };

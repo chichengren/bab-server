@@ -4,14 +4,14 @@
 const Service = require('egg').Service;
 
 class MemberService extends Service {
-  async add(slackId, playerName) {
-    this.ctx.logger.info(`service.member.add - slackId: ${slackId} playerName: ${playerName}`);
+  async add(slackId, name) {
+    this.ctx.logger.info(`service.member.add - slackId: ${slackId} name: ${name}`);
 
     if (await this.get(slackId)) {
       throw new Error('slack Id already registered');
     }
 
-    await this.ctx.model.Member.create({ slackId, playerName });
+    await this.ctx.model.Member.create({ slackId, name });
   }
 
   async get(slackId) {

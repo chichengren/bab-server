@@ -42,17 +42,17 @@ class MemberController extends Controller {
 
   async add() {
     const { slackId } = this.ctx.request.body;
-    let { playerName } = this.ctx.request.body;
+    let { name } = this.ctx.request.body;
 
-    if (!slackId || !playerName) {
+    if (!slackId || !name) {
       this.ctx.status = 400;
       return;
     }
 
-    playerName = playerName.toLowerCase();
+    name = name.toLowerCase();
 
     try {
-      await this.service.member.add(slackId, playerName);
+      await this.service.member.add(slackId, name);
     } catch (error) {
       this.ctx.status = 400;
       return;
