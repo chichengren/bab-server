@@ -42,7 +42,7 @@ class CourtService extends Service {
     // TODO: check court status
 
     // add reservation
-    const reservation = await this.ctx.model.Reservation.create({ token: uuid(), courtNumber, names, startAt, endAt, randoms });
+    const reservation = await this.ctx.model.Reservation.create({ token: uuid(), courtNumber, players: names, startAt, endAt, randoms });
 
     // update player status
     await this.ctx.model.Player.updateMany({ name: { $in: names } }, { $set: { courtNumber, reservationToken: reservation.token } });

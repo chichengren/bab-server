@@ -7,7 +7,7 @@ module.exports = app => {
   const ReservationSchema = new Schema({
     token: { type: String, index: true, unique: true },
     courtNumber: { type: Number, index: true },
-    names: [ String ],
+    players: [ String ],
     startAt: { type: Number, index: true },
     endAt: { type: Number, index: true },
     randoms: Boolean
