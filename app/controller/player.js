@@ -18,6 +18,7 @@ class PlayerController extends Controller {
 
     if (!password || (!name && !slackId)) {
       this.ctx.status = 400;
+      this.ctx.body = { message: 'Missing password, name or slackId' };
       return;
     }
 
@@ -31,6 +32,8 @@ class PlayerController extends Controller {
       await this.service.player.add(name.toLowerCase(), password, slackId);
     } catch (error) {
       this.ctx.status = 400;
+      this.ctx.body = { message: error.message };
+      return;
     }
 
     this.ctx.body = {};
@@ -45,6 +48,7 @@ class PlayerController extends Controller {
 
       if (!member) {
         this.ctx.status = 400;
+        this.ctx.body = { message: 'Cannot find member given slackId' };
         return;
       }
 
@@ -65,6 +69,7 @@ class PlayerController extends Controller {
 
       if (!member) {
         this.ctx.status = 400;
+        this.ctx.body = { message: 'Cannot find member given slackId' };
         return;
       }
 

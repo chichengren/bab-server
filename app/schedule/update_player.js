@@ -14,7 +14,10 @@ module.exports = {
     for (const player of registeredPlayers) {
       const reservation = await ctx.model.Reservation.findOne({ token: player.reservationToken });
 
-      if (reservation.endAt < Date.now()) {
+      // TODO: remove until bot migrate over
+      const endAt = reservation.endAt ? reservation.endAt : reservation.startAt + 45 * 60 * 1000;
+
+      if (endAt < Date.now()) {
         await ctx.model.Player.updateOne({ name: player.name }, { $unset: { reservationToken: '', courtNumber: '' } });
       }
     }

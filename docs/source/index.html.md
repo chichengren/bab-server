@@ -8,8 +8,8 @@ toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
-includes:
-  - errors
+# includes:
+#   - errors
 
 search: true
 ---
@@ -176,7 +176,7 @@ This endpoint retrieves a specific player.
 
 ### HTTP Request
 
-`GET https://bab.moepas.com/players/get?slackId=slackId(&name=name)`
+`GET https://bab.moepas.com/api/players/get?slackId=slackId(&name=name)`
 
 ### URL Parameters
 
@@ -185,9 +185,8 @@ Parameter | Description
 slackId | The slackId of the player to retrieve
 name | The player name of the player to retrieve
 
-## Delete a Specific Kitten
-
-```ruby
+## Add a Player
+<!-- ```ruby
 require 'kittn'
 
 api = Kittn::APIClient.authorize!('meowmeowmeow')
@@ -199,39 +198,186 @@ import kittn
 
 api = kittn.authorize('meowmeowmeow')
 api.kittens.delete(2)
-```
+``` -->
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
+curl "https://bab.moepas.com/api/players/add"
+  -X POST -d "name=xxx&password=yyy"
 ```
 
-```javascript
+<!-- ```javascript
 const kittn = require('kittn');
 
 let api = kittn.authorize('meowmeowmeow');
 let max = api.kittens.delete(2);
-```
+``` -->
 
 > The above command returns JSON structured like this:
 
 ```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
+{}
 ```
 
 This endpoint deletes a specific kitten.
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`POST https://bab.moepas.com/api/players/add`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to delete
+name | The name of the player to add
+password | The password of the player to add
+slackId | The slackId of the player to delete
+
+
+## Delete a Player
+
+<!-- ```ruby
+require 'kittn'
+
+api = Kittn::APIClient.authorize!('meowmeowmeow')
+api.kittens.delete(2)
+```
+
+```python
+import kittn
+
+api = kittn.authorize('meowmeowmeow')
+api.kittens.delete(2)
+``` -->
+
+```shell
+curl "https://bab.moepas.com/api/players/delete"
+  -X POST -d "name=xxx"
+```
+
+<!-- ```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.delete(2);
+``` -->
+
+> The above command returns JSON structured like this:
+
+```json
+{}
+```
+
+This endpoint deletes a specific player.
+
+### HTTP Request
+
+`POST https://bab.moepas.com/api/players/delete`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+slackId | The slackId of the player to delete
+name | The name of the player to delete
+
+# Reservation
+
+## Get All Active Reservations
+
+```shell
+curl "https://bab.moepas.com/api/courts"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "reservations": [
+    {
+      "token": "reservation-token",
+      "courtNumber": 1,
+      "players": ["one", "two"],
+      "startAt": 123,
+      "endAt": 456,
+      "randoms": false
+    }
+  ]
+}
+```
+
+This endpoint lists all active reservations.
+
+### HTTP Request
+
+`GET https://bab.moepas.com/api/courts`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+
+## Add Reservation
+
+```shell
+curl "https://bab.moepas.com/api/courts/register"
+  -X POST
+  -d "courtNumber=1&names=a&names=b"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "reservations": {
+    "token": "reservation-token",
+    "courtNumber": 1,
+    "players": ["one", "two"],
+    "startAt": 123,
+    "endAt": 456,
+    "randoms": false
+  }
+}
+```
+
+This endpoint adds an reservation.
+
+### HTTP Request
+
+`POST https://bab.moepas.com/api/courts/register`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+courtNumber | The court number of the reservations
+names (Array) | Player names to be assigned to this reservations
+delayInMinutes (Optional) | The delay for this reservation
+durationInMinutes (Optional) | Duration of this
+randoms (Optional) | Whether this reservation is random
+
+## Remove Reservation
+
+```shell
+curl "https://bab.moepas.com/api/courts/unregister"
+  -X POST
+  -d "token=token"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{}
+```
+
+This endpoint adds an reservation.
+
+### HTTP Request
+
+`POST https://bab.moepas.com/api/courts/unregister`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+token | The token of the reservation
 

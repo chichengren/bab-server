@@ -11,4 +11,9 @@ module.exports = {
     enable: true,
     package: 'egg-mongoose',
   },
+
+  cors: {
+    enable: true,
+    package: 'egg-cors'
+  }
 };

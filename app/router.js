@@ -16,7 +16,7 @@ module.exports = app => {
   router.get('/api/players', controller.player.index);
   router.get('/api/players/get', controller.player.get);
   router.post('/api/players/add', controller.player.add);
-  router.delete('/api/players/delete', controller.player.delete);
+  router.post('/api/players/delete', controller.player.delete);
 
   // member
   router.get('/api/members', controller.member.index);

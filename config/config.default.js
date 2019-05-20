@@ -30,6 +30,11 @@ module.exports = appInfo => {
     }
   };
 
+  // cors
+  config.cors = {
+    origin: '*',
+  };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

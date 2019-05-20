@@ -10,11 +10,19 @@ class CourtService extends Service {
 
     const timestamp = Date.now();
 
-    return await this.ctx.model.Reservation
+    const reservations = await this.ctx.model.Reservation
       .where('startAt').lte(timestamp)
-      .where('endAt')
-      .gte(timestamp)
+      // TODO: check endAt also after bot migrate over
+      // .where('endAt').gte(timestamp)
       .exec();
+
+    return reservations.map(r => {
+      const endAt = r.endAt ? r.endAt : r.startAt + 45 * 60 * 1000;
+
+      r.endAt = endAt;
+
+      return r;
+    }).filter(r => r.endAt <= timestamp);
   }
 
   async addReservation(courtNumber, names, startAt, endAt, randoms) {
@@ -56,7 +64,7 @@ class CourtService extends Service {
     const reservation = await this.ctx.model.Reservation.findOne({ token });
 
     // update player status
-    await this.ctx.model.Player.updateMany({ name: { $in: reservation.names } }, { $unset: { courtNumber: '', reservationToken: '' } });
+    await this.ctx.model.Player.updateMany({ name: { $in: reservation.players } }, { $unset: { courtNumber: '', reservationToken: '' } });
 
     // remove reservation
     await this.ctx.model.Reservation.deleteOne({ token });
