@@ -4,13 +4,15 @@ const Controller = require('egg').Controller;
 
 class CourtController extends Controller {
   async index() {
-    const reservations = await this.service.court.getActiveReservations();
+    const { active } = this.ctx.request.query;
+
+    const reservations = await this.service.court.getReservations({ active });
 
     this.ctx.body = { reservations };
   }
 
   async register() {
-    const { courtNumber, names, delayInMinutes = 0, randoms = false, durationInMinutes = 45 } = this.ctx.request.body;
+    const { courtNumber, names = [], delayInMinutes = 0, randoms = false, durationInMinutes = 45 } = this.ctx.request.body;
 
     if (!courtNumber) {
       this.ctx.status = 400;
@@ -18,17 +20,14 @@ class CourtController extends Controller {
       return;
     }
 
-    if (!names || !names.length) {
+    if (!names.length && !randoms) {
       this.ctx.status = 400;
       this.ctx.body = { message: 'Must provide player names' };
       return;
     }
 
-    const startAt = Date.now() + delayInMinutes * 60 * 1000;
-    const endAt = startAt + durationInMinutes * 60 * 1000;
-
     try {
-      const reservation = await this.service.court.addReservation(courtNumber, names, startAt, endAt, randoms);
+      const reservation = await this.service.court.addReservation(courtNumber, names, delayInMinutes, durationInMinutes, randoms);
 
       this.ctx.body = { reservation };
     } catch (error) {

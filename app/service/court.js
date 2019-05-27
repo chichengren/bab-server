@@ -5,16 +5,20 @@ const Service = require('egg').Service;
 const uuid = require('uuid/v4');
 
 class CourtService extends Service {
-  async getActiveReservations() {
-    this.ctx.logger.info('service.court.getActiveReservations');
+  async getReservations({ active = false }) {
+    this.ctx.logger.info('service.court.getReservations');
 
     const timestamp = Date.now();
 
-    const reservations = await this.ctx.model.Reservation
-      .where('startAt').lte(timestamp)
+    let query = this.ctx.model.Reservation.find();
+
+    if (active) {
+      query = query.where('startAt').lte(timestamp);
       // TODO: check endAt also after bot migrate over
-      // .where('endAt').gte(timestamp)
-      .exec();
+      // .where('endAt').gte(timestamp);
+    }
+
+    const reservations = await query.exec();
 
     return reservations.map(r => {
       const endAt = r.endAt ? r.endAt : r.startAt + 45 * 60 * 1000;
@@ -22,10 +26,10 @@ class CourtService extends Service {
       r.endAt = endAt;
 
       return r;
-    }).filter(r => r.endAt <= timestamp);
+    }).filter(r => r.endAt >= timestamp);
   }
 
-  async addReservation(courtNumber, names, startAt, endAt, randoms) {
+  async addReservation(courtNumber, names, delayInMinutes, durationInMinutes, randoms) {
     this.ctx.logger.info(`service.court.addReservation - courtNumber: ${courtNumber} names #: ${names.length}`);
 
     if (names.length > 4) {
@@ -47,9 +51,26 @@ class CourtService extends Service {
       }
     });
 
-    // TODO: check court status
+    const previousCourts = await this.ctx.model.Reservation.find({ courtNumber }).sort({ startAt: -1 }).exec();
 
-    // add reservation
+    let startAt;
+    let endAt;
+
+    if (previousCourts.length === 0) {
+      startAt = Date.now() + delayInMinutes * 60 * 1000;
+      endAt = startAt + durationInMinutes * 60 * 1000;
+    } else {
+      const lastReservation = previousCourts[0];
+
+      // TODO: remove checking
+      if (!lastReservation.endAt) {
+        lastReservation.endAt = lastReservation.startAt + 45 * 60 * 1000;
+      }
+
+      startAt = lastReservation.endAt + delayInMinutes * 60 * 1000;
+      endAt = startAt + durationInMinutes * 60 * 1000;
+    }
+
     const reservation = await this.ctx.model.Reservation.create({ token: uuid(), courtNumber, players: names, startAt, endAt, randoms });
 
     // update player status
