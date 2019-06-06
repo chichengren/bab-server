@@ -89,6 +89,22 @@ class CourtService extends Service {
 
     // remove reservation
     await this.ctx.model.Reservation.deleteOne({ token });
+
+    // move up following reservations
+    const followingReservations = await this.ctx.model.Reservation.find()
+      .where('startAt').gte(reservation.endAt)
+      .sort('startAt')
+      .exec();
+
+    if (followingReservations.length !== 0) {
+      const timeDiff = followingReservations[0].startAt - Date.now();
+
+      for (const r of followingReservations) {
+        const startAt = r.startAt - timeDiff;
+        const endAt = r.endAt - timeDiff;
+        await this.ctx.model.Reservation.updateOne({ token: r.token }, { startAt, endAt });
+      }
+    }
   }
 }
 
