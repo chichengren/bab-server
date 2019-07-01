@@ -12,6 +12,20 @@ module.exports = appInfo => {
    **/
   const config = exports = {};
 
+  // views
+  config.view = {
+    defaultViewEngine: 'handlebars',
+    defaultExtension: '.hbs',
+    mapping: {
+      '.hbs': 'handlebars',
+    },
+  };
+
+  // static
+  config.static = {
+    prefix: '/bab-web'
+  };
+
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1557275564990_3126';
 

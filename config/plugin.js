@@ -15,5 +15,10 @@ module.exports = {
   cors: {
     enable: true,
     package: 'egg-cors'
+  },
+
+  handlebars: {
+    enable: true,
+    package: 'egg-view-handlebars',
   }
 };
